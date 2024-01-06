@@ -1,6 +1,6 @@
 # Numbers
 
-**TODO: Add description**
+Module Numbers, which implements GenServer to manage number.
 
 ## Installation
 
