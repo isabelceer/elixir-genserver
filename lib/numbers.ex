@@ -9,8 +9,7 @@ defmodule Numbers do
 
   @doc """
   Starts a linked GenServer process, passing in the current module
-  (`__MODULE__` == `Numbers`) as both the callback module
-  and the alias/name of the server process for future reference.
+  (`__MODULE__` == `Numbers`) as both the callback module.
 
   Also passes in a map (`%{number: 0}`) as the initial state (handled in the `init/1` callback below).
   """
@@ -51,7 +50,7 @@ defmodule Numbers do
   """
   @impl true
   def init(state) do
-    Process.send_after(self(), :increment_number, 5000)
+    increment_number()
     {:ok, state}
   end
 
@@ -83,11 +82,16 @@ defmodule Numbers do
   @impl true
   def handle_info(:increment_number, state) do
     new_state = Map.update(state, :number, 0, fn current_value -> current_value + 1 end)
+    increment_number()
     {:noreply, new_state}
   end
 
   @impl true
   def handle_info(:msg, state) do
     {:noreply, state}
+  end
+
+  def increment_number do
+    Process.send_after(self(), :increment_number, 5000)
   end
 end
